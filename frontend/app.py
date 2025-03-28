@@ -6,49 +6,54 @@ from components.input_form import input_form
 from components.display_results import display_results
 from components.audio_player import audio_player
 
-# Get user input
+# FastAPI backend URL
+BACKEND_URL = "http://127.0.0.1:8000"
+
+# Get user input from input_form
 company_name, analyze_button = input_form()
 
 if analyze_button and company_name:
-    # Mock sentiment and topics (Replace with actual API call)
-    sentiment = "Positive"  # Example output
-    topics = ["Stock Market", "New Product", "Investor Confidence"]
+    # Call the backend API to fetch news and analyze sentiment
+    response = requests.post(f"{BACKEND_URL}/analyze", json={"company": company_name})
 
-    display_results(sentiment, topics)
+    if response.status_code == 200:
+        result = response.json()
+        
+        # Extract sentiment and topics from API response
+        sentiment = result.get("sentiment", "Neutral")
+        topics = result.get("topics", [])
 
-    # Play TTS audio summary
-    audio_player("output/hindi_summary.mp3")
+        # Display results using Streamlit components
+        display_results(sentiment, topics)
+
+        # Play TTS audio summary (if available)
+        audio_file = "output/hindi_summary.mp3"  # This should be updated if dynamic
+        audio_player(audio_file)
+    else:
+        st.error("Error fetching sentiment analysis. Please try again.")
 
 # Initialize FastAPI app
 app = FastAPI()
 
 # Define data model for input
 class SentimentRequest(BaseModel):
-    text: str
+    company: str
 
-# Dummy sentiment analysis function
-def analyze_sentiment(text):
-    if "good" in text.lower():
-        return {"sentiment": "positive", "confidence": 0.9}
-    elif "bad" in text.lower():
-        return {"sentiment": "negative", "confidence": 0.8}
-    else:
-        return {"sentiment": "neutral", "confidence": 0.7}
-
-# Define FastAPI route
+# Define FastAPI route for sentiment analysis
 @app.post("/analyze")
 def analyze(request: SentimentRequest):
-    result = analyze_sentiment(request.text)
-    return result
+    """Calls the backend API to analyze sentiment for the given company."""
+    response = requests.post(f"{BACKEND_URL}/api/analyze", json={"company": request.company})
+    return response.json()
 
 # Streamlit frontend
 def main():
     st.title("News Sentiment Analyzer")
     user_input = st.text_area("Enter news article or text:")
-    
+
     if st.button("Analyze Sentiment"):
         if user_input:
-            response = requests.post("http://127.0.0.1:8000/analyze", json={"text": user_input})
+            response = requests.post(f"{BACKEND_URL}/api/analyze_text", json={"text": user_input})
             if response.status_code == 200:
                 result = response.json()
                 st.write(f"**Sentiment:** {result['sentiment']}")
