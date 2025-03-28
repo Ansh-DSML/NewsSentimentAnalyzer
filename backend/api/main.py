@@ -1,11 +1,11 @@
 from fastapi import FastAPI
-from api.routes import router
+from pydantic import BaseModel
 
 app = FastAPI()
 
-# Include API routes
-app.include_router(router)
+class SentimentRequest(BaseModel):
+    company: str
 
-@app.get("/")
-def root():
-    return {"message": "Welcome to the News Sentiment Analyzer API"}
+@app.post("/analyze")
+def analyze(request: SentimentRequest):
+    return {"message": f"Analyzing sentiment for {request.company}"}
