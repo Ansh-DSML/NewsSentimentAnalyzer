@@ -49,9 +49,10 @@ def analyze(request: SentimentRequest):
 # Streamlit frontend
 def main():
     st.title("News Sentiment Analyzer")
+
     user_input = st.text_area("Enter news article or text:")
 
-    if st.button("Analyze Sentiment"):
+    if st.button("Analyze Sentiment", key="text_analysis"):
         if user_input:
             response = requests.post(f"{BACKEND_URL}/api/analyze_text", json={"text": user_input})
             if response.status_code == 200:
