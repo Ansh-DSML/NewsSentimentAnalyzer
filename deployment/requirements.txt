@@ -1,0 +1,14 @@
+streamlit
+requests
+fastapi
+uvicorn
+gtts
+pandas
+numpy
+torch
+transformers
+scikit-learn
+matplotlib
+seaborn
+yaml
+logging
