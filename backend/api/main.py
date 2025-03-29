@@ -1,9 +1,20 @@
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
+import os
 from pydantic import BaseModel
 import json
 import random
+from text_to_speech.tts import generate_audio 
+from text_to_speech.tts import text_to_speech 
+
 
 app = FastAPI()
+
+OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "output","hindi_summary.mp3")
+
+class AudioRequest(BaseModel):
+    text: str
+
 
 class CompanyRequest(BaseModel):
     company: str
@@ -72,3 +83,17 @@ async def analyze(request: CompanyRequest):
 
     print("Response Sent to Frontend:", json.dumps(response_data, indent=4))  # Debugging
     return response_data
+
+@app.post("/generate_audio")
+async def generate_audio_endpoint(request: AudioRequest):
+    audio_path = text_to_speech(request.text)  # Use correct function from tts.py
+    if audio_path:
+        return {"audio_path": "/get_audio"}  # Returning endpoint for Streamlit
+    else:
+        return {"error": "Audio generation failed"}
+
+@app.get("/get_audio")
+async def get_audio():
+    if os.path.exists(OUTPUT_PATH):
+        return FileResponse(OUTPUT_PATH, media_type="audio/mpeg", filename="hindi_summary.mp3")
+    return {"error": "Audio file not found"}

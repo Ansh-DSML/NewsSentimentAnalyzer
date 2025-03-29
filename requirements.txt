@@ -12,6 +12,8 @@ spacy==3.7.3
 # Text-to-Speech
 gTTS==2.5.1
 pydub==0.25.1  # Needed for working with audio files
+googletrans==4.0.0-rc1
+
 
 # Backend (API)
 fastapi==0.110.0
