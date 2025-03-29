@@ -17,11 +17,13 @@ def input_form():
     """Creates an input form to accept company name from dropdown or search box."""
     st.sidebar.header("News Sentiment Analyzer")
 
-    # Dropdown for predefined IT companies
-    selected_company = st.sidebar.selectbox("Select a Company", TOP_IT_COMPANIES)
+    # Unique key for the dropdown to avoid duplicate ID errors
+    selected_company = st.sidebar.selectbox(
+        "Select a Company", TOP_IT_COMPANIES, key="company_dropdown_123"
+    )
 
     # User-defined search field
-    custom_company = st.sidebar.text_input("Or Type Company Name (Alphanumeric only)")
+    custom_company = st.sidebar.text_input("Or Type Company Name (Alphanumeric only)", key="custom_company_input_123")
 
     # Validate user input
     if custom_company:
@@ -33,6 +35,6 @@ def input_form():
     else:
         company_name = selected_company  # Use dropdown selection if no custom input
 
-    analyze_button = st.sidebar.button("Analyze Sentiment")
+    analyze_button = st.sidebar.button("Analyze Sentiment", key="analyze_button_123")
 
     return company_name, analyze_button
