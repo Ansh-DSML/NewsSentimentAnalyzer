@@ -76,25 +76,5 @@ def main():
                     else:
                         st.error("Failed to generate audio.")
 
-
-    # Text-based analysis
-    user_input = st.text_area("Or Enter news article or text:")
-    if st.button("Analyze Text Sentiment"):
-        if user_input:
-            try:
-                response = requests.post(f"{BACKEND_URL}/analyze", json={"text": user_input})
-                response.raise_for_status()
-                result = response.json()
-
-                st.subheader("Text Sentiment Analysis Result")
-                sentiment = result.get("sentiment", "Neutral")
-                topics = result.get("topics", [])
-
-                st.markdown(f"**Sentiment:** {sentiment}")
-                st.markdown(f"**Topics Identified:** {', '.join(topics)}")
-
-            except requests.exceptions.RequestException as e:
-                st.error(f"Error analyzing text: {e}")
-
 if __name__ == "__main__":
     main()
