@@ -1,6 +1,6 @@
 import os
 from gtts import gTTS
-from googletrans import Translator  # ✅ Better translation
+from deep_translator import GoogleTranslator  # ✅ Replacing googletrans
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get backend path
 OUTPUT_PATH = os.path.join(BASE_DIR, "..", "output", "hindi_summary.mp3")  # Absolute path
@@ -12,9 +12,8 @@ def text_to_speech(text, lang="hi", output_file=OUTPUT_PATH):
         return None
 
     try:
-        # ✅ Use googletrans for better translation
-        translator = Translator()
-        translated_text = translator.translate(text, src="en", dest="hi").text
+        # ✅ Use deep-translator instead of googletrans
+        translated_text = GoogleTranslator(source='en', target='hi').translate(text)
 
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         tts = gTTS(text=translated_text, lang=lang, slow=False)
