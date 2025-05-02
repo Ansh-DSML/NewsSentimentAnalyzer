@@ -1,8 +1,8 @@
 import requests
 import datetime
-import config  # Import API key from config.py
+  # Import API key from config.py
 
-NEWS_API_KEY = config.NEWS_API_KEY  # Ensure you have this in config.py
+NEWS_API_KEY = "5eab13d77b3148d99f8b19b7efd9502b"  # Ensure you have this in config.py
 NEWS_API_URL = "https://newsapi.org/v2/everything"
 
 def fetch_news(company_name, num_articles=20):

@@ -5,7 +5,7 @@ from components.display_results import display_results
 from components.audio_player import audio_player
 
 # Configuration
-BACKEND_URL = "http://127.0.0.1:8000"
+BACKEND_URL = "https://fastapi-news-backend.onrender.com"
 
 def fetch_sentiment_analysis(company_name):
     """Fetch sentiment analysis from backend API."""

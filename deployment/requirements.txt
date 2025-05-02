@@ -1,5 +1,6 @@
 streamlit
 requests
+deep-translator
 fastapi
 uvicorn
 gtts
